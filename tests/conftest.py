@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 
 import pytest
 import pytest_asyncio
-from core.config import settings
 from dishka import Scope
 from dishka import make_async_container
 from dishka import provide
@@ -16,6 +15,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.pool import NullPool
 from testcontainers.postgres import PostgresContainer
 
+from app.core.config import settings
 from app.core.models.base import Base
 from app.dependencies.infrastructure import InfrastructureProvider
 from app.main import app
