@@ -4,6 +4,7 @@ from enum import auto
 from pydantic import BaseModel
 from pydantic import HttpUrl
 from pydantic import PostgresDsn
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings
 from pydantic_settings import SettingsConfigDict
 
@@ -52,12 +53,19 @@ class DatabaseConfig(BaseModel):
     }
 
 
+class AuthConfig(BaseModel):
+    secret: SecretStr
+    lifetime_seconds: int = 86400 * 7
+    cookie_secure: bool
+
+
 class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
     test_db: TestDBConfig = TestDBConfig()
     test_api: TestAPIConfig = TestAPIConfig()
     db: DatabaseConfig
+    auth: AuthConfig
 
     model_config = SettingsConfigDict(
         env_file=("app/.env.template", "app/.env"),
