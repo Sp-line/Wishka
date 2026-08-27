@@ -11,6 +11,6 @@ if TYPE_CHECKING:
 
 def get_jwt_strategy() -> JWTStrategy[User, UserID]:
     return JWTStrategy(
-        secret=settings.auth.secret,
+        secret=settings.auth.secret.get_secret_value(),
         lifetime_seconds=settings.auth.lifetime_seconds,
     )
