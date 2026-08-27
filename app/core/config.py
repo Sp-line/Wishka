@@ -58,20 +58,26 @@ class DatabaseConfig(BaseModel):
 
 class AuthConfig(BaseModel):
     secret: SecretStr
+    reset_password_token_secret: str
+    verification_token_secret: str
+
     lifetime_seconds: int = 86400 * 7
     cookie_secure: bool
+
+    verification_link: HttpUrl = HttpUrl("http://localhost:3000/login?token={token}")
+    reset_link: HttpUrl = HttpUrl("http://localhost:3000/reset-password?token={token}")
 
 
 class ClientConfig(BaseModel):
     client_id: str
     client_secret: str
-    redirect_url: str
+    redirect_url: HttpUrl
     associate_by_email: bool = True
     is_verified_by_default: bool = True
 
 
 class GoogleConfig(ClientConfig):
-    redirect_url: str = "http://localhost:3000/google/callback/"
+    redirect_url: HttpUrl = HttpUrl("http://localhost:3000/google/callback/")
 
 
 class OAuthClientConfig(BaseModel):
