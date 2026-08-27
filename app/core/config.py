@@ -1,3 +1,4 @@
+import logging
 from enum import StrEnum
 from enum import auto
 
@@ -7,6 +8,8 @@ from pydantic import PostgresDsn
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings
 from pydantic_settings import SettingsConfigDict
+
+from app.core.types.log import LogLevel  # noqa: TC001
 
 
 class RunConfig(BaseModel):
@@ -75,11 +78,22 @@ class OAuthClientConfig(BaseModel):
     google: GoogleConfig
 
 
+class LoggingConfig(BaseModel):
+    log_level: LogLevel = "info"
+    log_format: str = "[%(asctime)s.%(msecs)03d] %(module)10s:%(lineno)-3d %(levelname)-7s - %(message)s"  # noqa: E501
+    log_datefmt: str = "%Y-%m-%d %H:%M:%S"
+
+    @property
+    def log_level_value(self) -> int:
+        return logging.getLevelNamesMapping()[self.log_level.upper()]
+
+
 class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
     test_db: TestDBConfig = TestDBConfig()
     test_api: TestAPIConfig = TestAPIConfig()
+    logging: LoggingConfig = LoggingConfig()
     db: DatabaseConfig
     auth: AuthConfig
     oauth: OAuthClientConfig
