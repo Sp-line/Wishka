@@ -3,9 +3,11 @@ from typing import TYPE_CHECKING
 
 from dishka import make_async_container
 from dishka.integrations.fastapi import setup_dishka as setup_fastapi_dishka
+from dishka.integrations.taskiq import setup_dishka as setup_taskiq_dishka
 from fastapi import FastAPI
 from taskiq_nats import PullBasedJetStreamBroker
 
+from app.core.taskiq_broker import broker
 from app.dependencies.infrastructure import InfrastructureProvider
 
 if TYPE_CHECKING:
@@ -27,5 +29,6 @@ def create() -> FastAPI:
     )
 
     setup_fastapi_dishka(container, app)
+    setup_taskiq_dishka(container, broker)
 
     return app
