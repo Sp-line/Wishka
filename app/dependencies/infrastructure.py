@@ -4,6 +4,7 @@ from collections.abc import AsyncIterator  # noqa: TC003
 from dishka import Provider
 from dishka import Scope
 from dishka import provide
+from fastapi_mail import FastMail
 from sqlalchemy.ext.asyncio import AsyncSession  # noqa: TC002
 from taskiq_nats import PullBasedJetStreamBroker  # noqa: TC002
 
@@ -46,3 +47,7 @@ class InfrastructureProvider(Provider):
 
         if not broker.is_worker_process:
             await broker.shutdown()
+
+    @provide(scope=Scope.APP)
+    async def get_fast_mail(self) -> FastMail:
+        return FastMail(settings.mail.conf)
