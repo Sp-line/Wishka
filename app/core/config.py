@@ -1,7 +1,9 @@
 import logging
 from enum import StrEnum
 from enum import auto
+from pathlib import Path
 
+from fastapi_mail import ConnectionConfig
 from pydantic import BaseModel
 from pydantic import HttpUrl
 from pydantic import NatsDsn
@@ -11,6 +13,8 @@ from pydantic_settings import BaseSettings
 from pydantic_settings import SettingsConfigDict
 
 from app.core.types.log import LogLevel  # noqa: TC001
+
+BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
 
 class RunConfig(BaseModel):
@@ -109,6 +113,34 @@ class TaskiqConfig(BaseModel):
         return f"worker_{self.worker_queue}"
 
 
+class MailConfig(BaseModel):
+    mail_username: str
+    mail_from: str
+    mail_password: SecretStr
+    mail_port: int = 465
+    mail_server: str = "smtp.gmail.com"
+    mail_starttls: bool = False
+    mail_ssl_tls: bool = True
+    use_credentials: bool = True
+    validate_certs: bool = True
+    template_folder: Path = BASE_DIR / "templates"
+
+    @property
+    def conf(self) -> ConnectionConfig:
+        return ConnectionConfig(
+            MAIL_USERNAME=self.mail_username,
+            MAIL_PASSWORD=self.mail_password,
+            MAIL_FROM=self.mail_from,
+            MAIL_PORT=self.mail_port,
+            MAIL_SERVER=self.mail_server,
+            MAIL_STARTTLS=self.mail_starttls,
+            MAIL_SSL_TLS=self.mail_ssl_tls,
+            USE_CREDENTIALS=self.use_credentials,
+            VALIDATE_CERTS=self.validate_certs,
+            TEMPLATE_FOLDER=self.template_folder,
+        )
+
+
 class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
@@ -119,6 +151,7 @@ class Settings(BaseSettings):
     auth: AuthConfig
     oauth: OAuthClientConfig
     taskiq: TaskiqConfig
+    mail: MailConfig
 
     model_config = SettingsConfigDict(
         env_file=("app/.env.template", "app/.env"),
