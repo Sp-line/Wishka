@@ -8,6 +8,7 @@ dependencies = [
     "asyncpg>=0.31.0",
     "dishka>=1.10.1",
     "fastapi>=0.136.1",
+    "fastapi-mail>=1.6.8",
     "fastapi-users[oauth,sqlalchemy]>=15.0.5",
     "pydantic-settings>=2.14.1",
     "pydantic[email]>=2.13.4",
