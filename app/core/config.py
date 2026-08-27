@@ -4,6 +4,7 @@ from enum import auto
 
 from pydantic import BaseModel
 from pydantic import HttpUrl
+from pydantic import NatsDsn
 from pydantic import PostgresDsn
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings
@@ -94,6 +95,20 @@ class LoggingConfig(BaseModel):
         return logging.getLevelNamesMapping()[self.log_level.upper()]
 
 
+class TaskiqConfig(BaseModel):
+    url: NatsDsn
+    subject: str = "taskiq.tasks.>"
+    stream_name: str = "tasks_stream"
+    pull_consume_batch: int = 1
+    pull_consume_timeout: float | None = None
+    worker_queue: str = "default"
+    log_format: str = "[%(asctime)s.%(msecs)03d][%(processName)s] %(module)16s:%(lineno)-3d %(levelname)-7s - %(message)s"  # noqa: E501
+
+    @property
+    def durable(self) -> str:
+        return f"worker_{self.worker_queue}"
+
+
 class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
@@ -103,6 +118,7 @@ class Settings(BaseSettings):
     db: DatabaseConfig
     auth: AuthConfig
     oauth: OAuthClientConfig
+    taskiq: TaskiqConfig
 
     model_config = SettingsConfigDict(
         env_file=("app/.env.template", "app/.env"),
