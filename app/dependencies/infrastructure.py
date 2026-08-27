@@ -1,12 +1,15 @@
+from collections.abc import AsyncIterable  # noqa: TC003
 from collections.abc import AsyncIterator  # noqa: TC003
 
 from dishka import Provider
 from dishka import Scope
 from dishka import provide
 from sqlalchemy.ext.asyncio import AsyncSession  # noqa: TC002
+from taskiq_nats import PullBasedJetStreamBroker  # noqa: TC002
 
 from app.core.config import settings
 from app.core.models.db import Database
+from app.core.taskiq_broker import broker
 
 
 class InfrastructureProvider(Provider):
@@ -31,3 +34,15 @@ class InfrastructureProvider(Provider):
     ) -> AsyncIterator[AsyncSession]:  # pragma: no cover
         async for session in db.session_getter():
             yield session
+
+    @provide(scope=Scope.APP)
+    async def get_taskiq_broker(
+        self,
+    ) -> AsyncIterable[PullBasedJetStreamBroker]:  # pragma: no cover
+        if not broker.is_worker_process:
+            await broker.startup()
+
+        yield broker
+
+        if not broker.is_worker_process:
+            await broker.shutdown()
