@@ -76,6 +76,9 @@ rev = "v2.3.1"
 [[repos.hooks]]
 id = "mypy"
 additional_dependencies = [
+    "taskiq",
+    "taskiq-fastapi",
+    "taskiq-nats",
     "fastapi-users[oauth, sqlalchemy]",
     "fastapi",
     "pydantic",
