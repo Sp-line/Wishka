@@ -76,6 +76,7 @@ rev = "v2.3.1"
 [[repos.hooks]]
 id = "mypy"
 additional_dependencies = [
+    "fastapi-mail",
     "taskiq",
     "taskiq-fastapi",
     "taskiq-nats",
