@@ -59,6 +59,22 @@ class AuthConfig(BaseModel):
     cookie_secure: bool
 
 
+class ClientConfig(BaseModel):
+    client_id: str
+    client_secret: str
+    redirect_url: str
+    associate_by_email: bool = True
+    is_verified_by_default: bool = True
+
+
+class GoogleConfig(ClientConfig):
+    redirect_url: str = "http://localhost:3000/google/callback/"
+
+
+class OAuthClientConfig(BaseModel):
+    google: GoogleConfig
+
+
 class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
@@ -66,6 +82,7 @@ class Settings(BaseSettings):
     test_api: TestAPIConfig = TestAPIConfig()
     db: DatabaseConfig
     auth: AuthConfig
+    oauth: OAuthClientConfig
 
     model_config = SettingsConfigDict(
         env_file=("app/.env.template", "app/.env"),
