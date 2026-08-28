@@ -9,6 +9,7 @@ from taskiq_nats import PullBasedJetStreamBroker
 
 from app.core.taskiq_broker import broker
 from app.dependencies.infrastructure import InfrastructureProvider
+from app.exceptions.handlers import register_exception_handlers
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
@@ -30,5 +31,7 @@ def create() -> FastAPI:
 
     setup_fastapi_dishka(container, app)
     setup_taskiq_dishka(container, broker)
+
+    register_exception_handlers(app)
 
     return app
