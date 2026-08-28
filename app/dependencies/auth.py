@@ -1,9 +1,12 @@
 from typing import TYPE_CHECKING
+from typing import Annotated
 
 from dishka.integrations.fastapi import FromDishka  # noqa: TC002
+from fastapi import Depends
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession  # noqa: TC002
 
+from app.core.auth.user_manager import UserManager
 from app.core.models.oauth_account import OAuthAccount
 from app.core.models.user import User
 
@@ -21,3 +24,9 @@ async def get_user_db(
         user_table=User,
         oauth_account_table=OAuthAccount,
     )
+
+
+async def get_user_manager(
+    user_db: Annotated[SQLAlchemyUserDatabase[User, UserID], Depends(get_user_db)],
+) -> AsyncIterator[UserManager]:
+    yield UserManager(user_db=user_db)
