@@ -102,7 +102,7 @@ class LoggingConfig(BaseModel):
 
 class TaskiqConfig(BaseModel):
     url: NatsDsn
-    subject: str = "taskiq.tasks.>"
+    subject: str = "taskiq.tasks"
     stream_name: str = "tasks_stream"
     pull_consume_batch: int = 1
     pull_consume_timeout: float | None = None
