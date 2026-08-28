@@ -155,7 +155,7 @@ class Settings(BaseSettings):
     mail: MailConfig
 
     model_config = SettingsConfigDict(
-        env_file=("app/.env.template", "app/.env"),
+        env_file=("app/.env.template", "app/.env", ".env.template", ".env"),
         case_sensitive=False,
         env_nested_delimiter="__",
         env_prefix="APP_CONFIG__",
