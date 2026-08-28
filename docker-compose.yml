@@ -74,8 +74,6 @@ services:
       - "taskiq"
       - "worker"
       - "app.core.taskiq_broker:broker"
-      - "-q"
-      - "mail"
       - "--workers"
       - "1"
       - "--no-configure-logging"
@@ -89,6 +87,8 @@ services:
           target: /app/app
         - action: rebuild
           path: ./uv.lock
+        - action: rebuild
+          path: ./pyproject.toml
 
 volumes:
   pg_data_storage:
