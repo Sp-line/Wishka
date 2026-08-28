@@ -1,4 +1,28 @@
 services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - app/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      pg:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+    command: [ "uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
+    develop:
+      watch:
+        - action: sync
+          path: ./app
+          target: /app/app
+        - action: rebuild
+          path: ./uv.lock
+        - action: rebuild
+          path: ./pyproject.toml
+
   pg:
     image: postgres:18
     container_name: wishka_db
