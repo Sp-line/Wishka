@@ -63,8 +63,8 @@ class DatabaseConfig(BaseModel):
 
 class AuthConfig(BaseModel):
     secret: SecretStr
-    reset_password_token_secret: str
-    verification_token_secret: str
+    reset_password_token_secret: SecretStr
+    verification_token_secret: SecretStr
 
     lifetime_seconds: int = 86400 * 7
     cookie_secure: bool
