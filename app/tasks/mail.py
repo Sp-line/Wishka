@@ -9,7 +9,7 @@ from pydantic import NameEmail
 from app.core.taskiq_broker import broker
 
 
-@broker.task(queue="email")
+@broker.task(queue="mail")
 @inject(patch_module=True)
 async def send_verification_email_task(
     fm: FromDishka[FastMail],
@@ -27,7 +27,7 @@ async def send_verification_email_task(
     await fm.send_message(message, template_name="mail/verify_email.html")
 
 
-@broker.task(queue="email")
+@broker.task(queue="mail")
 @inject(patch_module=True)
 async def send_reset_password_email_task(
     fm: FromDishka[FastMail],
