@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile
     env_file:
       - app/.env
+    environment:
+      - RUN_MIGRATIONS=true
     ports:
       - "8000:8000"
     depends_on:
@@ -55,14 +57,12 @@ services:
       retries: 3
       start_period: 5s
 
-  worker_mail:
+  taskiq_worker:
     build:
       context: .
       dockerfile: Dockerfile
     env_file:
       - app/.env
-    environment:
-      - APP_CONFIG__TASKIQ__WORKER_QUEUE=mail
     depends_on:
       pg:
         condition: service_healthy

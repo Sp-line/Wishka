@@ -104,14 +104,11 @@ class TaskiqConfig(BaseModel):
     url: NatsDsn
     subject: str = "taskiq.tasks"
     stream_name: str = "tasks_stream"
+    durable: str = "worker_tasks"
     pull_consume_batch: int = 1
     pull_consume_timeout: float | None = None
     worker_queue: str = "default"
     log_format: str = "[%(asctime)s.%(msecs)03d][%(processName)s] %(module)16s:%(lineno)-3d %(levelname)-7s - %(message)s"  # noqa: E501
-
-    @property
-    def durable(self) -> str:
-        return f"worker_{self.worker_queue}"
 
 
 class MailConfig(BaseModel):
