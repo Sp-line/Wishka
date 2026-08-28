@@ -55,6 +55,41 @@ services:
       retries: 3
       start_period: 5s
 
+  worker_mail:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - app/.env
+    environment:
+      - APP_CONFIG__TASKIQ__WORKER_QUEUE=mail
+    depends_on:
+      pg:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+    command:
+      - "uv"
+      - "run"
+      - "taskiq"
+      - "worker"
+      - "app.core.taskiq_broker:broker"
+      - "-q"
+      - "mail"
+      - "--workers"
+      - "1"
+      - "--no-configure-logging"
+      - "--fs-discover"
+      - "--tasks-pattern"
+      - "**/tasks/*.py"
+    develop:
+      watch:
+        - action: sync
+          path: ./app
+          target: /app/app
+        - action: rebuild
+          path: ./uv.lock
+
 volumes:
   pg_data_storage:
   nats_data:
