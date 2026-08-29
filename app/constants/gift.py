@@ -1,4 +1,5 @@
 from decimal import Decimal
+from enum import StrEnum
 
 
 class GiftLimits:
@@ -22,3 +23,14 @@ class GiftLimits:
 
     NOTE_MIN: int = 2
     NOTE_MAX: int = 300
+
+    CURRENCY_MIN: int = 3
+    CURRENCY_MAX: int = 3
+
+
+class Currency(StrEnum):
+    UAH = "UAH"
+    USD = "USD"
+    EUR = "EUR"
+    PLN = "PLN"
+    GBP = "GBP"
