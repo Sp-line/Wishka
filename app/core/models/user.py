@@ -10,7 +10,9 @@ from app.core.models.mixins import ObservableMixin
 from app.core.types.user import UserID
 
 if TYPE_CHECKING:
+    from app.core.models.gift import Gift
     from app.core.models.oauth_account import OAuthAccount
+    from app.core.models.reservation import Reservation
     from app.core.models.wishlist import Wishlist
 
 
@@ -20,4 +22,15 @@ class User(Base, IntIdPkMixin, ObservableMixin, SQLAlchemyBaseUserTable[UserID])
     owned_wishlists: Mapped[list[Wishlist]] = relationship(
         back_populates="owner",
         cascade="all, delete-orphan",
+    )
+    reservations: Mapped[list[Reservation]] = relationship(
+        back_populates="reserver",
+        cascade="all, delete-orphan",
+    )
+
+    reserved_gifts: Mapped[list[Gift]] = relationship(
+        secondary="reservations",
+        back_populates="reservers",
+        viewonly=True,
+        overlaps="reservations",
     )

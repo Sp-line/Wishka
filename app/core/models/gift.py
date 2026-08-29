@@ -18,7 +18,9 @@ from app.core.models.mixins import IntIdPkMixin
 from app.core.models.mixins import ObservableMixin
 
 if TYPE_CHECKING:
-    from app.core.models import Wishlist
+    from app.core.models.reservation import Reservation
+    from app.core.models.user import User
+    from app.core.models.wishlist import Wishlist
 
 
 class Gift(IntIdPkMixin, ObservableMixin, Base):
@@ -40,3 +42,15 @@ class Gift(IntIdPkMixin, ObservableMixin, Base):
     )
 
     wishlist: Mapped[Wishlist] = relationship(back_populates="gifts")
+
+    reservations: Mapped[list[Reservation]] = relationship(
+        back_populates="gift",
+        cascade="all, delete-orphan",
+    )
+
+    reservers: Mapped[list[User]] = relationship(
+        secondary="reservations",
+        back_populates="reserved_gifts",
+        viewonly=True,
+        overlaps="reservations",
+    )
