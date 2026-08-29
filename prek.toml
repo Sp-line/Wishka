@@ -76,6 +76,8 @@ rev = "v2.1.0"
 [[repos.hooks]]
 id = "mypy"
 additional_dependencies = [
+    "aioboto3",
+    "types-aiobotocore-s3",
     "fastapi-mail",
     "taskiq",
     "taskiq-fastapi",
