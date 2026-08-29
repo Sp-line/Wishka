@@ -17,6 +17,7 @@ from app.core.models.mixins import ObservableMixin
 if TYPE_CHECKING:
     from app.core.models.gift import Gift
     from app.core.models.user import User
+    from app.core.models.wishlist_members import WishlistMember
 
 
 def generate_invite_token() -> str:
@@ -44,4 +45,15 @@ class Wishlist(IntIdPkMixin, ObservableMixin, Base):
     gifts: Mapped[list[Gift]] = relationship(
         back_populates="wishlist",
         cascade="all, delete-orphan",
+    )
+    wishlist_member_associations: Mapped[list[WishlistMember]] = relationship(
+        back_populates="wishlist",
+        cascade="all, delete-orphan",
+    )
+
+    users: Mapped[list[User]] = relationship(
+        secondary="wishlist_members",
+        back_populates="member_wishlists",
+        viewonly=True,
+        overlaps="wishlist_member_associations",
     )
