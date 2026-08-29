@@ -140,6 +140,14 @@ class MailConfig(BaseModel):
         )
 
 
+class S3Config(BaseModel):
+    endpoint_url: HttpUrl
+    access_key: SecretStr
+    secret_key: SecretStr
+    bucket_name: str
+    region: str
+
+
 class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
@@ -151,6 +159,7 @@ class Settings(BaseSettings):
     oauth: OAuthClientConfig
     taskiq: TaskiqConfig
     mail: MailConfig
+    s3: S3Config
 
     model_config = SettingsConfigDict(
         env_file=("app/.env.template", "app/.env", ".env.template", ".env"),
