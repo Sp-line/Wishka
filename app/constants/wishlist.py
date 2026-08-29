@@ -4,3 +4,6 @@ class WishlistLimits:
 
     INVITE_TOKEN_MIN: int = 16
     INVITE_TOKEN_MAX: int = 64
+
+    DESCRIPTION_MIN: int = 2
+    DESCRIPTION_MAX: int = 500

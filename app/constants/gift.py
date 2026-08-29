@@ -19,3 +19,6 @@ class GiftLimits:
 
     IMAGE_URL_MIN: int = 11
     IMAGE_URL_MAX: int = 2048
+
+    NOTE_MIN: int = 2
+    NOTE_MAX: int = 300
