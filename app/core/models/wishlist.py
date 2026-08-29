@@ -35,6 +35,7 @@ class Wishlist(IntIdPkMixin, ObservableMixin, Base):
 
     owner_id: Mapped[int] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"),
+        index=True,
     )
 
     owner: Mapped[User] = relationship(back_populates="owned_wishlists")
