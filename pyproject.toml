@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.14"
 dependencies = [
+    "aioboto3>=15.5.0",
     "alembic>=1.18.4",
     "asyncpg>=0.31.0",
     "dishka>=1.10.1",
@@ -16,6 +17,7 @@ dependencies = [
     "taskiq>=0.12.5",
     "taskiq-fastapi>=0.5.0",
     "taskiq-nats>=0.6.0",
+    "types-aiobotocore-s3>=3.9.0",
     "uvicorn[standard]>=0.47.0",
 ]
 
