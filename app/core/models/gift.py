@@ -8,7 +8,6 @@ from sqlalchemy import Integer
 from sqlalchemy import Numeric
 from sqlalchemy import SmallInteger
 from sqlalchemy import String
-from sqlalchemy import Text
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -33,7 +32,7 @@ class Gift(IntIdPkMixin, ObservableMixin, Base):
     price: Mapped[Decimal | None] = mapped_column(Numeric(10, 2))
     url: Mapped[str | None] = mapped_column(String(GiftLimits.URL_MAX))
     image_url: Mapped[str | None] = mapped_column(String(GiftLimits.IMAGE_URL_MAX))
-    note: Mapped[str | None] = mapped_column(Text)
+    note: Mapped[str | None] = mapped_column(String(GiftLimits.NOTE_MAX))
 
     wishlist_id: Mapped[int] = mapped_column(
         ForeignKey("wishlists.id", ondelete="CASCADE"),

@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
-from sqlalchemy import Text
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -26,7 +25,9 @@ def generate_invite_token() -> str:
 
 class Wishlist(IntIdPkMixin, ObservableMixin, Base):
     title: Mapped[str] = mapped_column(String(WishlistLimits.TITLE_MAX))
-    description: Mapped[str | None] = mapped_column(Text)
+    description: Mapped[str | None] = mapped_column(
+        String(WishlistLimits.DESCRIPTION_MAX),
+    )
     invite_token: Mapped[str] = mapped_column(
         String(WishlistLimits.INVITE_TOKEN_MAX),
         unique=True,
