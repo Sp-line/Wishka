@@ -1,9 +1,12 @@
 from typing import TYPE_CHECKING
 
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
+from sqlalchemy import String
 from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 
+from app.constants.user import UserLimits
 from app.core.models.base import Base
 from app.core.models.mixins import IntIdPkMixin
 from app.core.models.mixins import ObservableMixin
@@ -18,6 +21,8 @@ if TYPE_CHECKING:
 
 
 class User(Base, IntIdPkMixin, ObservableMixin, SQLAlchemyBaseUserTable[UserID]):
+    photo_url: Mapped[str | None] = mapped_column(String(UserLimits.PHOTO_URL_MAX))
+
     oauth_accounts: Mapped[list[OAuthAccount]] = relationship(lazy="joined")
 
     owned_wishlists: Mapped[list[Wishlist]] = relationship(
