@@ -14,6 +14,7 @@ from types_aiobotocore_s3 import S3Client  # noqa: TC002
 from app.core.config import settings
 from app.core.models.db import Database
 from app.core.taskiq_broker import broker
+from app.storage.s3 import S3Storage
 
 
 class InfrastructureProvider(Provider):
@@ -71,3 +72,7 @@ class InfrastructureProvider(Provider):
 
         async with session.client(**client_kwargs) as client:
             yield client
+
+    @provide(scope=Scope.APP)
+    def get_s3_storage(self, s3_client: S3Client) -> S3Storage:
+        return S3Storage(s3_client=s3_client, bucket_name=settings.s3.bucket_name)
