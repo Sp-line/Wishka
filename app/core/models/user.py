@@ -22,6 +22,7 @@ if TYPE_CHECKING:
 
 class User(Base, IntIdPkMixin, ObservableMixin, SQLAlchemyBaseUserTable[UserID]):
     photo_url: Mapped[str | None] = mapped_column(String(UserLimits.PHOTO_URL_MAX))
+    username: Mapped[str | None] = mapped_column(String(UserLimits.USERNAME_MAX))
 
     oauth_accounts: Mapped[list[OAuthAccount]] = relationship(lazy="joined")
 
