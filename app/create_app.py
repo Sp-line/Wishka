@@ -8,6 +8,7 @@ from fastapi import FastAPI
 from taskiq_nats import PullBasedJetStreamBroker
 
 from app.core.taskiq_broker import broker
+from app.dependencies.domain import DomainProvider
 from app.dependencies.infrastructure import InfrastructureProvider
 from app.dependencies.repositories import RepositoryProvider
 from app.exceptions.handlers import register_exception_handlers
@@ -29,6 +30,7 @@ def create() -> FastAPI:
     container = make_async_container(
         InfrastructureProvider(),
         RepositoryProvider(),
+        DomainProvider(),
     )
 
     setup_fastapi_dishka(container, app)
