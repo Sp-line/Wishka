@@ -109,7 +109,12 @@ class TaskiqConfig(BaseModel):
     pull_consume_batch: int = 1
     pull_consume_timeout: float | None = None
     worker_queue: str = "default"
+
     log_format: str = "[%(asctime)s.%(msecs)03d][%(processName)s] %(module)16s:%(lineno)-3d %(levelname)-7s - %(message)s"  # noqa: E501
+
+    admin_url: HttpUrl
+    api_token: SecretStr
+    broker_name: str = "nats_jetstream_broker"
 
 
 class MailConfig(BaseModel):

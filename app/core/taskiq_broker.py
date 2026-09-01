@@ -3,6 +3,7 @@ import logging
 import taskiq_fastapi
 from taskiq import TaskiqEvents
 from taskiq import TaskiqState
+from taskiq.middlewares import TaskiqAdminMiddleware
 from taskiq_nats import PullBasedJetStreamBroker
 
 from app.core.config import settings
@@ -16,6 +17,12 @@ broker = PullBasedJetStreamBroker(
     durable=settings.taskiq.durable,
     pull_consume_batch=settings.taskiq.pull_consume_batch,
     pull_consume_timeout=settings.taskiq.pull_consume_timeout,
+).with_middlewares(
+    TaskiqAdminMiddleware(
+        url=str(settings.taskiq.admin_url),
+        api_token=settings.taskiq.api_token.get_secret_value(),
+        taskiq_broker_name=settings.taskiq.broker_name,
+    ),
 )
 
 taskiq_fastapi.init(broker, "main:app")
