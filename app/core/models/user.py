@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from app.core.models.oauth_account import OAuthAccount
     from app.core.models.reservation import Reservation
     from app.core.models.wishlist import Wishlist
-    from app.core.models.wishlist_members import WishlistMember
+    from app.core.models.wishlist_member import WishlistMember
 
 
 class User(Base, IntIdPkMixin, ObservableMixin, SQLAlchemyBaseUserTable[UserID]):

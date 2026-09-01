@@ -17,7 +17,7 @@ from app.core.models.mixins import ObservableMixin
 if TYPE_CHECKING:
     from app.core.models.gift import Gift
     from app.core.models.user import User
-    from app.core.models.wishlist_members import WishlistMember
+    from app.core.models.wishlist_member import WishlistMember
 
 
 def generate_invite_token() -> str:
