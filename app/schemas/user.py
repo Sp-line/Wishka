@@ -41,8 +41,16 @@ class UserCreate(BaseUserCreate):
     username: Username | None = None
 
 
+class UserCreateDB(UserCreate):
+    photo_url: UserPhotoUrl | None = None
+
+
 class UserUpdate(BaseUserUpdate):
     username: Username | None = None
+
+
+class UserUpdateDB(UserUpdate):
+    photo_url: UserPhotoUrl | None = None
 
 
 class UserRead(BaseUser[UserID]):
