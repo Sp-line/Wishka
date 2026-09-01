@@ -20,8 +20,6 @@ if TYPE_CHECKING:
 
 
 class Reservation(IntIdPkMixin, ObservableMixin, Base):
-    __tablename__ = "reservations"
-
     quantity: Mapped[int] = mapped_column(
         Integer,
         default=ReservationLimits.QUANTITY_DEFAULT,

@@ -2,12 +2,16 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from sqlalchemy import Enum as SAEnum
 from sqlalchemy import ForeignKey
+from sqlalchemy import Index
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 
+from app.constants.role import Role
+from app.constants.wishlist_member import WishlistMemberLimits
 from app.core.models.base import Base
 from app.core.models.mixins import IntIdPkMixin
 from app.core.models.mixins import ObservableMixin
@@ -18,7 +22,14 @@ if TYPE_CHECKING:
 
 
 class WishlistMember(IntIdPkMixin, ObservableMixin, Base):
-    __tablename__ = "wishlist_members"
+    role: Mapped[Role] = mapped_column(
+        SAEnum(
+            Role,
+            native_enum=False,
+            length=WishlistMemberLimits.ROLE_MAX,
+        ),
+        default=Role.PARTICIPANT,
+    )
 
     wishlist_id: Mapped[int] = mapped_column(
         ForeignKey("wishlists.id", ondelete="CASCADE"),
@@ -39,5 +50,11 @@ class WishlistMember(IntIdPkMixin, ObservableMixin, Base):
             "wishlist_id",
             "user_id",
             name="uq_wishlist_members_wishlist_id_user_id",
+        ),
+        Index(
+            "ix_one_owner_per_wishlist",
+            "wishlist_id",
+            unique=True,
+            postgresql_where=(role == Role.OWNER),
         ),
     )
