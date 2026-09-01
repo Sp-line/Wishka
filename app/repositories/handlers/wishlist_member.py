@@ -35,9 +35,19 @@ fk_wishlist_members_user_id_users = ConstraintRule(
     ),
 )
 
+ix_one_owner_per_wishlist = ConstraintRule(
+    name="ix_one_owner_per_wishlist",
+    error_code=PostgresErrorCode.UNIQUE_VIOLATION,
+    exception=UniqueFieldError(
+        field_name="role",
+        table_name="wishlist_members",
+    ),
+)
+
 wishlist_member_error_handler = TableErrorHandler(
     pk_wishlist_members,
     uq_wishlist_members_wishlist_id_user_id,
     fk_wishlist_members_wishlist_id_wishlists,
     fk_wishlist_members_user_id_users,
+    ix_one_owner_per_wishlist,
 )
