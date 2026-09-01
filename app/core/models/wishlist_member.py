@@ -27,6 +27,7 @@ class WishlistMember(IntIdPkMixin, ObservableMixin, Base):
             Role,
             native_enum=False,
             length=WishlistMemberLimits.ROLE_MAX,
+            values_callable=lambda obj: [e.value for e in obj],
         ),
         default=Role.PARTICIPANT,
     )
