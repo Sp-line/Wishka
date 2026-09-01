@@ -2,8 +2,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from constants.role import Role
+from schemas.wishlist_member import WishlistMemberCreateDB
+
 from app.repositories.unit_of_work import UnitOfWork  # noqa: TC001
 from app.repositories.wishlist import WishlistRepository  # noqa: TC001
+from app.repositories.wishlist_member import WishlistMemberRepository  # noqa: TC001
 from app.schemas.wishlist import WishlistCreateDB
 from app.schemas.wishlist import WishlistCreateReq
 from app.schemas.wishlist import WishlistRead
@@ -16,10 +20,12 @@ class WishlistCreateUsage:
     def __init__(
         self,
         repository: WishlistRepository,
+        wishlist_member_repository: WishlistMemberRepository,
         unit_of_work: UnitOfWork,
     ) -> None:
         self._repo = repository
         self._uow = unit_of_work
+        self._wishlist_member_repo = wishlist_member_repository
 
     async def __call__(
         self,
@@ -33,4 +39,11 @@ class WishlistCreateUsage:
             )
             obj = await self._repo.create(wishlist_create_data)
 
+            wishlist_member_create_data = WishlistMemberCreateDB(
+                role=Role.OWNER,
+                user_id=owner_id,
+                wishlist_id=obj.id,
+            )
+
+            await self._wishlist_member_repo.create(wishlist_member_create_data)
             return WishlistRead.model_validate(obj)
