@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession  # noqa: TC002
 
 from app.core.models.wishlist_member import WishlistMember
@@ -20,3 +21,15 @@ class WishlistMemberRepository(
             session=session,
             table_error_handler=reservation_error_handler,
         )
+
+    async def get_by_user_and_wishlist(
+        self,
+        user_id: int,
+        wishlist_id: int,
+    ) -> WishlistMember | None:
+        stmt = select(WishlistMember).where(
+            WishlistMember.user_id == user_id,
+            WishlistMember.wishlist_id == wishlist_id,
+        )
+        result = await self._session.execute(stmt)
+        return result.scalar_one_or_none()
