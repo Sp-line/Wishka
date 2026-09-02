@@ -1,12 +1,13 @@
 from typing import Annotated
 
+from annotated_types import MaxLen
+from annotated_types import MinLen
 from fastapi_users.schemas import BaseUser
 from fastapi_users.schemas import BaseUserCreate
 from fastapi_users.schemas import BaseUserUpdate
 from pydantic import AfterValidator
 from pydantic import HttpUrl
 from pydantic import StringConstraints
-from pydantic import UrlConstraints
 
 from app.constants.user import UserLimits
 from app.core.types.user import UserID
@@ -15,12 +16,10 @@ from app.schemas.validators.username import validate_username_consecutive_symbol
 from app.schemas.validators.username import validate_username_not_all_digits
 from app.schemas.validators.username import validate_username_start_finish
 
-type UserPhotoUrl = Annotated[
-    HttpUrl,
-    UrlConstraints(
-        max_length=UserLimits.PHOTO_URL_MAX,
-        allowed_schemes=["http", "https"],
-    ),
+type UserAvatarS3Key = Annotated[
+    str,
+    MinLen(UserLimits.AVATAR_S3_KEY_MIN),
+    MaxLen(UserLimits.AVATAR_S3_KEY_MAX),
 ]
 type Username = Annotated[
     str,
@@ -42,7 +41,7 @@ class UserCreate(BaseUserCreate):
 
 
 class UserCreateDB(UserCreate):
-    photo_url: UserPhotoUrl | None = None
+    avatar_s3_key: UserAvatarS3Key | None = None
 
 
 class UserUpdate(BaseUserUpdate):
@@ -50,9 +49,9 @@ class UserUpdate(BaseUserUpdate):
 
 
 class UserUpdateDB(UserUpdate):
-    photo_url: UserPhotoUrl | None = None
+    avatar_s3_key: UserAvatarS3Key | None = None
 
 
 class UserRead(BaseUser[UserID]):
-    photo_url: UserPhotoUrl | None = None
+    avatar_url: HttpUrl | None = None
     username: str | None = None

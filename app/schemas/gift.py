@@ -40,12 +40,10 @@ type GiftUrl = Annotated[
         allowed_schemes=["http", "https"],
     ),
 ]
-type GiftImageUrl = Annotated[
-    HttpUrl,
-    UrlConstraints(
-        max_length=GiftLimits.IMAGE_URL_MAX,
-        allowed_schemes=["http", "https"],
-    ),
+type GiftImageS3Key = Annotated[
+    str,
+    MinLen(GiftLimits.IMAGE_S3_KEY_MIN),
+    MaxLen(GiftLimits.IMAGE_S3_KEY_MAX),
 ]
 type GiftNote = Annotated[
     str,
@@ -72,7 +70,7 @@ class GiftCreateReq(GiftBaseWithRelation): ...
 
 
 class GiftCreateDB(GiftBaseWithRelation):
-    image_url: GiftImageUrl | None = None
+    image_s3_key: GiftImageS3Key | None = None
 
 
 class GiftUpdateReq(BaseModel):
@@ -92,12 +90,12 @@ class GiftUpdateDB(BaseModel):
     price: GiftPrice | None = None
     currency: Currency | None = None
     url: GiftUrl | None = None
-    image_url: GiftImageUrl | None = None
+    image_s3_key: GiftImageS3Key | None = None
     note: GiftNote | None = None
     wishlist_id: PositiveInt | None = None
 
 
 class GiftRead(Id, GiftBaseWithRelation):
-    image_url: GiftImageUrl | None = None
+    image_url: HttpUrl | None = None
 
     model_config = ConfigDict(from_attributes=True)

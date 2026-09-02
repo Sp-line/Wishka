@@ -1,6 +1,6 @@
 class UserLimits:
-    PHOTO_URL_MIN: int = 11
-    PHOTO_URL_MAX: int = 2048
+    AVATAR_S3_KEY_MIN: int = 20
+    AVATAR_S3_KEY_MAX: int = 255
 
     USERNAME_MIN: int = 2
     USERNAME_MAX: int = 20

@@ -18,8 +18,8 @@ class GiftLimits:
     URL_MIN: int = 11
     URL_MAX: int = 2048
 
-    IMAGE_URL_MIN: int = 11
-    IMAGE_URL_MAX: int = 2048
+    IMAGE_S3_KEY_MIN: int = 20
+    IMAGE_S3_KEY_MAX: int = 255
 
     NOTE_MIN: int = 2
     NOTE_MAX: int = 300

@@ -35,7 +35,7 @@ class Gift(IntIdPkMixin, ObservableMixin, Base):
     )
     price: Mapped[Decimal | None] = mapped_column(Numeric(10, 2))
     url: Mapped[str | None] = mapped_column(String(GiftLimits.URL_MAX))
-    image_url: Mapped[str | None] = mapped_column(String(GiftLimits.IMAGE_URL_MAX))
+    image_s3_key: Mapped[str | None] = mapped_column(String(GiftLimits.IMAGE_S3_KEY_MAX))
     note: Mapped[str | None] = mapped_column(String(GiftLimits.NOTE_MAX))
     currency: Mapped[Currency | None] = mapped_column(
         SAEnum(
