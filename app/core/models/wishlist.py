@@ -3,6 +3,8 @@ from __future__ import annotations
 import secrets
 from typing import TYPE_CHECKING
 
+from sqlalchemy import Boolean
+from sqlalchemy import Enum as SAEnum
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped
@@ -10,6 +12,7 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 
 from app.constants.wishlist import WishlistLimits
+from app.constants.wishlist import WishlistPrivacy
 from app.core.models.base import Base
 from app.core.models.mixins import IntIdPkMixin
 from app.core.models.mixins import ObservableMixin
@@ -28,6 +31,20 @@ class Wishlist(IntIdPkMixin, ObservableMixin, Base):
     title: Mapped[str] = mapped_column(String(WishlistLimits.TITLE_MAX))
     description: Mapped[str | None] = mapped_column(
         String(WishlistLimits.DESCRIPTION_MAX),
+    )
+    privacy: Mapped[WishlistPrivacy] = mapped_column(
+        SAEnum(
+            WishlistPrivacy,
+            native_enum=False,
+            length=WishlistLimits.PRIVACY_MAX,
+            values_callable=lambda obj: [e.value for e in obj],
+        ),
+        default=WishlistPrivacy.PUBLIC,
+    )
+    is_reservable: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+        server_default="true",
     )
     invite_token: Mapped[str] = mapped_column(
         String(WishlistLimits.INVITE_TOKEN_MAX),

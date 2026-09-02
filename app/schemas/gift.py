@@ -73,7 +73,7 @@ class GiftCreateDB(GiftBaseWithRelation):
     image_s3_key: GiftImageS3Key | None = None
 
 
-class GiftUpdateReq(BaseModel):
+class GiftUpdateBase(BaseModel):
     title: GiftTitle | None = None
     priority: GiftPriority | None = None
     quantity: GiftQuantity | None = None
@@ -83,15 +83,11 @@ class GiftUpdateReq(BaseModel):
     note: GiftNote | None = None
 
 
-class GiftUpdateDB(BaseModel):
-    title: GiftTitle | None = None
-    priority: GiftPriority | None = None
-    quantity: GiftQuantity | None = None
-    price: GiftPrice | None = None
-    currency: Currency | None = None
-    url: GiftUrl | None = None
+class GiftUpdateReq(GiftUpdateBase): ...
+
+
+class GiftUpdateDB(GiftUpdateBase):
     image_s3_key: GiftImageS3Key | None = None
-    note: GiftNote | None = None
     wishlist_id: PositiveInt | None = None
 
 

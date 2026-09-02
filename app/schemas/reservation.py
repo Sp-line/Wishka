@@ -29,12 +29,14 @@ class ReservationCreateDB(ReservationBaseWithRelation):
     reserver_id: PositiveInt
 
 
-class ReservationUpdateReq(BaseModel):
+class ReservationUpdateBase(BaseModel):
     quantity: ReservationQuantity | None = None
 
 
-class ReservationUpdateDB(BaseModel):
-    quantity: ReservationQuantity | None = None
+class ReservationUpdateReq(ReservationUpdateBase): ...
+
+
+class ReservationUpdateDB(ReservationUpdateBase):
     gift_id: PositiveInt | None = None
     reserver_id: PositiveInt | None = None
 

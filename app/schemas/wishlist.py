@@ -8,6 +8,7 @@ from pydantic import Field
 from pydantic import PositiveInt
 
 from app.constants.wishlist import WishlistLimits
+from app.constants.wishlist import WishlistPrivacy
 from app.core.models.wishlist import generate_invite_token
 from app.schemas.base import Id
 
@@ -30,6 +31,8 @@ type WishlistInviteToken = Annotated[
 
 class WishlistBase(BaseModel):
     title: WishlistTitle
+    privacy: WishlistPrivacy = WishlistPrivacy.PUBLIC
+    is_reservable: bool = True
     description: WishlistDescription | None = None
 
 
@@ -41,14 +44,17 @@ class WishlistCreateDB(WishlistBase):
     invite_token: WishlistInviteToken = Field(default_factory=generate_invite_token)
 
 
-class WishlistUpdateReq(BaseModel):
+class WishlistUpdateBase(BaseModel):
     title: WishlistTitle | None = None
+    privacy: WishlistPrivacy | None = None
+    is_reservable: bool | None = None
     description: WishlistDescription | None = None
 
 
-class WishlistUpdateDB(BaseModel):
-    title: WishlistTitle | None = None
-    description: WishlistDescription | None = None
+class WishlistUpdateReq(WishlistUpdateBase): ...
+
+
+class WishlistUpdateDB(WishlistUpdateBase):
     invite_token: WishlistInviteToken | None = None
 
     owner_id: PositiveInt | None = None
