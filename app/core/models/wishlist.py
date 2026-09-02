@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import secrets
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean
@@ -23,10 +22,6 @@ if TYPE_CHECKING:
     from app.core.models.wishlist_member import WishlistMember
 
 
-def generate_invite_token() -> str:
-    return secrets.token_urlsafe(16)
-
-
 class Wishlist(IntIdPkMixin, ObservableMixin, Base):
     title: Mapped[str] = mapped_column(String(WishlistLimits.TITLE_MAX))
     description: Mapped[str | None] = mapped_column(
@@ -45,11 +40,6 @@ class Wishlist(IntIdPkMixin, ObservableMixin, Base):
         Boolean,
         default=True,
         server_default="true",
-    )
-    invite_token: Mapped[str] = mapped_column(
-        String(WishlistLimits.INVITE_TOKEN_MAX),
-        unique=True,
-        default=generate_invite_token,
     )
 
     owner_id: Mapped[int] = mapped_column(

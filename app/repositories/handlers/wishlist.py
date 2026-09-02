@@ -10,11 +10,6 @@ pk_wishlists = ConstraintRule(
     exception=UniqueFieldError(field_name="id", table_name="wishlists"),
 )
 
-uq_wishlists_invite_token = ConstraintRule(
-    name="uq_wishlists_invite_token",
-    error_code=PostgresErrorCode.UNIQUE_VIOLATION,
-    exception=UniqueFieldError(field_name="invite_token", table_name="wishlists"),
-)
 
 fk_wishlists_owner_id_users = ConstraintRule(
     name="fk_wishlists_owner_id_users",
@@ -24,6 +19,5 @@ fk_wishlists_owner_id_users = ConstraintRule(
 
 wishlist_error_handler = TableErrorHandler(
     pk_wishlists,
-    uq_wishlists_invite_token,
     fk_wishlists_owner_id_users,
 )
